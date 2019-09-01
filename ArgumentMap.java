@@ -6,7 +6,7 @@ import java.util.Map;
  * in a map for easy access.
  */
 public class ArgumentMap 
-	{
+{
 
 	private final Map<String, String> map;
 
@@ -14,9 +14,9 @@ public class ArgumentMap
 	 * Initializes the argument map.
 	 */
 	public ArgumentMap() 
-		{
+	{
 		map = new HashMap<>();
-		}
+	}
 
 	/**
 	 * Initializes the argument map and parses the specified arguments into
@@ -28,10 +28,10 @@ public class ArgumentMap
 	 * @see #parse(String[])
 	 */
 	public ArgumentMap(String[] args) 
-		{
+	{
 		this();
 		parse(args);
-		}
+	}
 
 	/**
 	 * Parses the specified arguments into key/value pairs and adds them to the
@@ -41,65 +41,52 @@ public class ArgumentMap
 	 *            command line arguments
 	 */
 	public void parse(String[] args) 
-		{
+	{
 		for(int i = 0; i < args.length; i++)
+		{
+			if(isFlag(args[i]))
 			{
-			if(args[i].startsWith("-") && (i + 1 != args.length))
-				{
-				if(!args[i + 1].startsWith("-"))
-					{
+				if(i != args.length - 1 && isValue(args[i + 1]))
 					map.put(args[i], args[i + 1]);
-					i++;
-					}
 				else
 					map.put(args[i], null);
-				}
-			else if(args[i].startsWith("-") && (i + 1 == args.length))
-				{
-				map.put(args[i], null);
-				}
 			}
 		}
+	}
 
 	/**
 	 * @param arg
 	 * @return
 	 */
 	public static boolean isFlag(String arg) 
-		{
+	{
 		if(arg == null)
 			return false;
 		
 		arg = arg.trim();
 		
-		if(arg.length() == 1)
-			return false;
-		
-		if(arg.startsWith("-"))
+		if(arg.startsWith("-") && arg.length() > 1)
 			return true;
 		
 		return false;
-		}
+	}
 
 	/**
 	 * @param arg
 	 * @return
 	 */
 	public static boolean isValue(String arg) 
-		{
+	{
 		if(arg == null)
 			return false;
 		
 		arg = arg.trim();
 		
-		if(arg.length() == 0)
-			return false;
+		if(!arg.startsWith("-") && !arg.isEmpty())
+			return true;
 		
-		if(arg.startsWith("-") || arg.startsWith(" "))
-			return false;
-		
-		return true;
-		}
+		return false;
+	}
 
 	/**
 	 * Returns the number of unique flags stored in the argument map.
@@ -107,9 +94,9 @@ public class ArgumentMap
 	 * @return number of flags
 	 */
 	public int numFlags() 
-		{
-		return this.map.keySet().size();
-		}
+	{
+		return this.map.size();
+	}
 
 	/**
 	 * Determines whether the specified flag is stored in the argument map.
@@ -120,9 +107,9 @@ public class ArgumentMap
 	 * @return true if the flag is in the argument map
 	 */
 	public boolean hasFlag(String flag) 
-		{
+	{
 		return this.map.containsKey(flag);
-		}
+	}
 
 	/**
 	 * Determines whether the specified flag is stored in the argument map and
@@ -134,12 +121,12 @@ public class ArgumentMap
 	 * @return true if the flag is in the argument map and has a non-null value
 	 */
 	public boolean hasValue(String flag) 
-		{
+	{
 		if(this.map.get(flag) != null)
 			return true;
 		
 		return false;
-		}
+	}
 
 	/**
 	 * Returns the value for the specified flag as a String object.
@@ -150,12 +137,9 @@ public class ArgumentMap
 	 * @return value as a String or null if flag or value was not found
 	 */
 	public String getString(String flag) 
-		{
-		if(!this.map.containsKey(flag))
-			return null;
-		
+	{	
 		return this.map.get(flag);
-		}
+	}
 
 	/**
 	 * Returns the value for the specified flag as a String object. If the flag
@@ -170,12 +154,25 @@ public class ArgumentMap
 	 *         value is missing
 	 */
 	public String getString(String flag, String defaultValue) 
-		{
+	{
 		if(!this.map.containsKey(flag) || this.map.get(flag) == null)
 			return defaultValue;
 		
 		return this.map.get(flag);
-		}
+	}
+	
+	/**
+	 * Returns the flag value if it contains a value
+	 * @param flag
+	 * @return
+	 */
+	public String getValue(String flag)
+	{
+		if(!this.map.containsKey(flag) && this.map.get(flag) == null && this.hasValue(flag) != true)	
+			return null;
+		
+		return this.map.get(flag);
+	}
 
 	/**
 	 * Returns the value for the specified flag as an int value. If the flag is
@@ -190,25 +187,20 @@ public class ArgumentMap
 	 *         value is missing
 	 */
 	public int getInteger(String flag, int defaultValue) 
-		{
-		if(!this.map.containsKey(flag) || this.map.get(flag) == null)
-			return defaultValue;
-		
+	{		
 		try
-			{
-			Integer.valueOf(this.map.get(flag));
-			}
-		catch(NumberFormatException e)
-			{
-			return defaultValue;
-			}
-		
-		return Integer.valueOf(this.map.get(flag));
+		{
+			return Integer.valueOf(this.map.get(flag));
 		}
+		catch(NumberFormatException e)
+		{
+			return defaultValue;
+		}		
+	}
 
 	@Override
 	public String toString() 
-		{
+	{
 		return map.toString();
-		}
 	}
+}
