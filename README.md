@@ -2,6 +2,12 @@
 
 Example commands:
 ```
+-path [path]
+-query [path]
+-index [path]
+-results [path]
+```
+```
 java Driver -path input/index/simple
             -query input/query/simple.txt
             -index index-simple.json
