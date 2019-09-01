@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * Cleans and parses text into words.
  */
 public class WordParser 
-	{
+{
 
 	/**
 	 * Regular expression for splitting text into words by one or more
@@ -34,11 +34,11 @@ public class WordParser
 	 * @see #CLEAN_REGEX
 	 */
 	public static String clean(String text) 
-		{
+	{
 		text = Normalizer.normalize(text, Normalizer.Form.NFC);
 		text = CLEAN_REGEX.matcher(text).replaceAll(" ");
 		return text.toLowerCase().trim();
-		}
+	}
 
 	/**
 	 * Splits the text into words by one or more whitespace.
@@ -50,10 +50,10 @@ public class WordParser
 	 * @see #SPLIT_REGEX
 	 */
 	public static String[] split(String text) 
-		{
+	{
 		text = text.trim();
 		return text.isEmpty() ? new String[0] : SPLIT_REGEX.split(text);
-		}
+	}
 
 	/**
 	 * Convenience method for cleaning and splitting text.
@@ -66,9 +66,9 @@ public class WordParser
 	 * @see #clean(String)
 	 */
 	public static String[] parseWords(String text) 
-		{
+	{
 		return split(clean(text));
-		}
+	}
 
 	/**
 	 * Convenience method for cleaning and splitting text, and returning only
@@ -81,9 +81,9 @@ public class WordParser
 	 * @see #parseWords(String)
 	 */
 	public static TreeSet<String> uniqueWords(String text) 
-		{
+	{
 		TreeSet<String> words = new TreeSet<>();
 		Collections.addAll(words, parseWords(text));
 		return words;
-		}
 	}
+}
