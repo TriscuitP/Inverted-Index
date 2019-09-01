@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * @see java.lang.String#replaceAll(String, String)
  */
 public class HTMLCleaner 
-	{
+{
 
 	/**
 	 * Replaces all HTML entities with a single space. For example,
@@ -25,12 +25,12 @@ public class HTMLCleaner
 	 * @return text without any HTML entities
 	 */
 	public static String stripEntities(String html) 
-		{
+	{
 		String regex = "((?m)&[^\\s].*?;)";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(html);
 		return matcher.replaceAll(" ");
-		}
+	}
 
 	/**
 	 * Replaces all HTML comments with a single space. For example, "A<!-- B
@@ -41,12 +41,12 @@ public class HTMLCleaner
 	 * @return text without any HTML comments
 	 */
 	public static String stripComments(String html) 
-		{
+	{
 		String regex = "((?s)(<!--).*?(-->))";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(html);
 		return matcher.replaceAll(" ");
-		}
+	}
 
 	/**
 	 * Replaces all HTML tags with a single space. For example, "A<b>B</b>C"
@@ -57,12 +57,12 @@ public class HTMLCleaner
 	 * @return text without any HTML tags
 	 */
 	public static String stripTags(String html) 
-		{
+	{
 		String regex = "(?ms)(<.*?>)";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(html);
 		return matcher.replaceAll(" ");
-		}
+	}
 
 	/**
 	 * Replaces everything between the element tags and the element tags
@@ -82,12 +82,12 @@ public class HTMLCleaner
 	 * @return text without that HTML element
 	 */
 	public static String stripElement(String html, String name) 
-		{
+	{
 		String regex = "(?is)<" + name + ".*?</" + name + "(\\s)*.*?>";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(html);
 		return matcher.replaceAll(" ");
-		}
+	}
 
 	/**
 	 * Removes all HTML (including any CSS and JavaScript).
@@ -97,7 +97,7 @@ public class HTMLCleaner
 	 * @return text without any HTML, CSS, or JavaScript
 	 */
 	public static String stripHTML(String html) 
-		{
+	{
 		html = stripComments(html);
 
 		html = stripElement(html, "head");
@@ -108,5 +108,5 @@ public class HTMLCleaner
 		html = stripEntities(html);
 
 		return html;
-		}
 	}
+}
